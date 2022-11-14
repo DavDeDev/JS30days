@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Understanding JavaScript's Capture</title>
 </head>
+
 <body class="bod">
 
   <div class="one">
@@ -13,36 +15,56 @@
     </div>
   </div>
 
-<style>
-  html {
-    box-sizing: border-box;
-  }
-  
-  *, *:before, *:after { 
-    box-sizing: inherit; 
-  }
+  <style>
+    html {
+      box-sizing: border-box;
+    }
 
-  div {
-    width: 100%;
-    padding: 100px;
-  }
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+    }
 
-  .one {
-    background: thistle;
-  }
+    div {
+      width: 100%;
+      padding: 100px;
+    }
 
-  .two {
-    background: mistyrose;
-  }
+    .one {
+      background: thistle;
+    }
 
-  .three {
-    background: coral;
-  }
-</style>
+    .two {
+      background: mistyrose;
+    }
 
-<button></button>
-<script>
+    .three {
+      background: coral;
+    }
+  </style>
 
-</script>
+  <button></button>
+  <script>
+    // JS will first Capture the event from the top down, then it will bubbling the event back up
+    // Bubbling -> It will figure out all the way up to the top
+    const divs = document.querySelectorAll('div');
+    const button = document.querySelector('button');
+
+    function logText(e) {
+      console.log(this.classList.value);
+      e.stopPropagation(); // stop bubbling to the upper divs
+    }
+
+    //document.body.addEventListener('click', logText);
+
+    divs.forEach(div => div.addEventListener('click', logText,
+      { capture: false, once: true })); //Once will unbind the event after it's been fired
+
+    button.addEventListener('click', () => {
+      console.log('Click!!!');
+    }, { once: true });
+  </script>
 </body>
+
 </html>
