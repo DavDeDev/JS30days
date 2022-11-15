@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Click and Drag</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div class="items">
     <div class="item item1">01</div>
@@ -34,8 +36,46 @@
     <div class="item item25">25</div>
   </div>
 
-<script>
-</script>
+  <script>
+    const slider = document.querySelector('.items');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
 
-  </body>
+    slider.addEventListener('mousedown', (e) => {
+      isDown = true;
+      slider.classList.add('active');
+      // We need to know where the mouse is when we click down
+      startX = e.pageX - slider.offsetLeft;
+      // We need to know where the scroll is when we click down
+      scrollLeft = slider.scrollLeft;
+    });
+
+    slider.addEventListener('mouseleave', () => {
+      isDown = false;
+      slider.classList.remove('active');
+
+    });
+
+    slider.addEventListener('mouseup', () => {
+      isDown = false;
+      slider.classList.remove('active');
+
+    });
+
+    slider.addEventListener('mousemove', (e) => {
+      if (!isDown) return; // stop the fn from running because we are not holding down the mouse
+      // Avoid stopping the event by accidentally clicking text inside the slider
+      e.preventDefault();
+      // we calculate the position of the mouse every time we move it
+      const x = e.pageX - slider.offsetLeft;
+      // we calculate the distance between the mouse and the start of the slider
+      const walk = x - startX;
+      // We move the slider by the distance moved
+      slider.scrollLeft = scrollLeft - walk;
+    });
+  </script>
+
+</body>
+
 </html>
